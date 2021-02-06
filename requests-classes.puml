@@ -1,0 +1,85 @@
+@startuml
+
+class GameState {
+    - string gameId 
+    - string idOfCurrentlyPlaying
+    - List<playerID> playingQueue;
+    - bool isGameFinished
+
+    - List<PlayerState> players
+    - List<TileContainer> factories
+    - TileContainer center
+}
+
+class PlayerState {
+    - string playerId
+
+    - int points
+    - PatternLines patternLines
+    - BottomLine bottomLine
+    - Wall wall
+}
+
+class TileContainer {
+    - string containerId
+
+    - Map<TileType, int> tiles
+}
+
+enum TileType {
+    patternedBlack,
+    plainRed,
+    patternedYellow,
+    plainBlue,
+    patternedBlue,
+    firstMove
+}
+
+class PatternLines {
+    - List<PatternLine> content
+}
+
+class PatternLine {
+    - string patternLineId
+
+    - int size
+    - int setTilesCount
+    - TileType tileType
+}
+
+class BottomLine {
+    List<TileType> content
+}
+
+class Wall {
+    - List<List<WallTile>> content
+}
+
+class WallTile {
+    - TileType tileType
+    - bool isSet
+    - bool isNew
+}
+
+class Move {
+    - string sourceContainerId
+    - string destinationPatternLineId
+    - TileType tileType
+}
+
+GameState <-- PlayerState
+GameState <-- TileContainer
+
+
+PlayerState <--  PatternLines
+PlayerState <--  BottomLine
+PlayerState <--  Wall
+
+
+PatternLines <-- PatternLine
+
+
+Wall <-- WallTile
+
+
+@enduml

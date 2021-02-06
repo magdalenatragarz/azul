@@ -1,0 +1,65 @@
+@startuml
+
+enum TileType {
+    patternedBlack,
+    plainRed,
+    patternedYellow,
+    plainBlue,
+    patternedBlue,
+    firstMove
+}
+
+
+class AzulPlayer {
+    - string playerID
+    - PlayerState state;
+    
+    + void move(Move)
+    + PlayerState getPlayerState()
+}
+
+class AzulGame {
+    - string gameID
+    - string roomID
+
+    - string idOfFirstPlayerInNextRound
+    - string idOfCurrentlyPlaying
+    - List<playerID> playingQueue;
+    - bool isEndOfRound;
+    - bool isCurrentRoundTheLast
+    - Map<TileType, int> usedTiles
+    - Map<TileType, int> notUsedTiles
+    - Map<playerID, AzulPlayer> players;
+    
+    + AzulGame(gameID, roomID)
+    + void addPlayer(AzulPlayer)
+    + void start()
+    + void applyMove(playerID, Move)
+    
+    + GameState getGameState();
+    + string getGameID()
+    + string getRoomID()
+
+    - void fillTileContainers()
+    - void countPoints()
+    - void adjustTileContainersCount()
+    - bool areContainersEmpty()
+}
+
+class AzulServer {
+    - Map<string, AzulGame> gamesByGameID;
+    - Map<int, AzulGame> gamesByRoomCode;
+    
+    + CreateGameResponse createGame()
+    + JoinGameResponse joinGame(JoinGameRequest)
+    + GetGameStateResponse getGameStateResponse(GetGameStateRequest)
+    + StartGameResponse startGame(StartGameRequest)
+    + MakeMoveResponse(MakeMoveRequest)
+    
+
+}
+
+AzulServer --> AzulGame
+AzulGame --> AzulPlayer
+
+@enduml

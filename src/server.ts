@@ -1,4 +1,3 @@
-import { Response, Request } from 'express'
 import express from 'express'
 
 const api = require('./api/send-file')

@@ -1,0 +1,18 @@
+@startuml
+
+AzulBackend <- AzulPlayer: CreateGameRequest ()
+AzulBackend --> AzulPlayer: CreateGameResponse(roomCode) 
+
+AzulBackend <- AzulPlayer: JoinGameRequest (roomCode)
+AzulBackend --> AzulPlayer: JoinGameResponse (playerID, gameID)
+
+AzulBackend <- AzulPlayer: GetGameStateRequest (gameID)
+AzulBackend --> AzulPlayer: GetGameStateResponse (GameState)
+
+AzulBackend <- AzulPlayer: StartGameRequest (gameID)
+AzulBackend --> AzulPlayer: StartGameResponse ()
+
+AzulBackend <- AzulPlayer: MakeMoveRequest (playerID, gameID, Move)
+AzulBackend --> AzulPlayer: MakeMoveResponse ()
+
+@enduml
