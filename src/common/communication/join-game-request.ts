@@ -1,7 +1,13 @@
-export class JoinGameRequest {
-    private roomCode : string;
+type RoomID = string;
 
-    constructor(roomCode : string) {
+export class JoinGameRequest {
+    private roomCode : RoomID;
+
+    constructor(roomCode : RoomID) {
         this.roomCode = roomCode;
+    }
+
+    public getRoomCode() : RoomID {
+        return this.roomCode;
     }
 }

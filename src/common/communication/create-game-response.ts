@@ -1,7 +1,10 @@
-export class CreateGameResponse {
-    private roomCode : Number;
+type RoomID = string;
 
-    constructor(roomCode : Number) {
+export class CreateGameResponse {
+    private roomCode : RoomID;
+    
+
+    constructor(roomCode : RoomID) {
         this.roomCode = roomCode
     }
 }

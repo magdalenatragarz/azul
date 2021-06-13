@@ -1,12 +1,15 @@
 import { TileType } from './tile-type'
 
+type ContainerID = string;
+type PatternLineID = string;
+
 export class Move {
-    private sourceContainerID : string;
-    private destinationPatternLineID : string;
+    private sourceContainerID : ContainerID;
+    private destinationPatternLineID : PatternLineID;
     private tileType : TileType;
 
-    constructor(sourceContainerID : string, 
-        destinationPatternLineID : string, 
+    constructor(sourceContainerID : ContainerID, 
+        destinationPatternLineID : PatternLineID, 
         tileType: TileType)
 
     {

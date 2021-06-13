@@ -1,7 +1,13 @@
-export class GetGameStateRequest {
-    private gameID : string;
+type GameID = string;
 
-    constructor(gameId : string) {
+export class GetGameStateRequest {
+    private gameID : GameID;
+
+    constructor(gameId : GameID) {
         this.gameID = gameId;
+    }
+
+    public getGameID() : GameID {
+        return this.gameID;
     }
 }

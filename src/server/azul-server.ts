@@ -12,33 +12,69 @@ import { MakeMoveResponse } from "../common/communication/make-move-response";
 
 import { AzulGame } from "./azul-game";
 import { v4 as getUUID } from "uuid"
+import { AzulPlayer } from "./azul-player";
+
+type GameID = string;
+type RoomID = string;
 
 export class AzulServer {
-    private gamesByGameID : Map<string, AzulGame>;
-    private gamesByRoomCode : Map<Number, AzulGame>;
+    private gamesByGameID : Map<GameID, AzulGame>;
+    private gamesByRoomID : Map<RoomID, AzulGame>;
 
     constructor() {
-        this.gamesByGameID = new Map<string, AzulGame>();
-        this.gamesByRoomCode = new Map<Number, AzulGame>();
+        this.gamesByGameID = new Map<GameID, AzulGame>();
+        this.gamesByRoomID = new Map<RoomID, AzulGame>();
     }
 
     public onCreateGame(req : CreateGameRequest) : CreateGameResponse {
-        return new CreateGameResponse(Math.random());
+        let gameID = getUUID();
+        let roomID = getUUID(); 
+        let newGame = new AzulGame(gameID, roomID);
+
+        this.gamesByGameID.set(gameID, newGame);
+        this.gamesByRoomID.set(roomID, newGame);
+        
+        return new CreateGameResponse(roomID);
     }
 
     public onJoinGame(req : JoinGameRequest) : JoinGameResponse {
-        return new JoinGameResponse(getUUID(), getUUID());
+        let newAzulPlayer = new AzulPlayer(getUUID());
+        let azulGame = this.gamesByRoomID.get(req.getRoomCode());
+
+        if (azulGame) {
+            azulGame.addPlayer(newAzulPlayer);
+            return new JoinGameResponse(newAzulPlayer.getPlayerID(), azulGame.getGameID());
+        }
+        throw new Error("Game with room code " + req.getRoomCode() + " does not exist");
     }
 
     public onGetGameState(req : GetGameStateRequest) : GetGameStateResponse {
-        return new GetGameStateResponse(new GameState(getUUID(), getUUID(), true));
+
+        let azulGame = this.gamesByGameID.get(req.getGameID());
+
+        if (azulGame) {
+            return new GetGameStateResponse(azulGame.getGameState());
+        }
+        throw new Error("Game with gameID " + req.getGameID() + " does not exist.");
     }
 
     public onStartGame(req : StartGameRequest) : StartGameResponse {
-        return new StartGameResponse();
+        let azulGame = this.gamesByGameID.get(req.getGameID());
+
+        if (azulGame) {
+            azulGame.start();
+            return new StartGameResponse();
+        }
+        throw new Error("Game with gameID " + req.getGameID() + " does not exist.");
     } 
 
     public onMakeMove(req : MakeMoveRequest) : MakeMoveResponse {
-        return new MakeMoveResponse();
+        let azulGame = this.gamesByGameID.get(req.getGameID());
+
+        if (azulGame) {
+            azulGame.applyMove(req.getPlayerID(), req.getMove());
+            return new MakeMoveResponse();
+        }
+        throw new Error("Game with gameID " + req.getGameID() + " does not exist.");
     }
 }

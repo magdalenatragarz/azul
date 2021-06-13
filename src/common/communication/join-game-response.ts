@@ -1,8 +1,11 @@
-export class JoinGameResponse {
-    private playerID : string;
-    private gameID : string;
+type PlayerID = string;
+type GameID = string;
 
-    constructor(playerID : string, gameID : string) {
+export class JoinGameResponse {
+    private playerID : PlayerID;
+    private gameID : GameID;
+
+    constructor(playerID : PlayerID, gameID : string) {
         this.playerID = playerID;
         this.gameID = gameID;
     }

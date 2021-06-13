@@ -1,38 +1,85 @@
+import { GameState } from "../common/types/game-state";
+import { Move } from "../common/types/move";
 import { TileType } from "../common/types/tile-type";
+import { AzulPlayer } from "../server/azul-player";
 
-import { AzulPlayer } from "./azul-player";
+type PlayerID = string;
+type GameID = string;
+type RoomID = string;
 
 export class AzulGame {
-    private gameID : string;
-    private roomCode : Number;
+    private gameID : GameID;
+    private roomID : RoomID;
 
-    private idOfFirstPlayerInNextRound ?: string;
-    private idOfCurrentlyPlaying ?: string;
+    private idOfFirstPlayerInNextRound ?: PlayerID;
+    private idOfCurrentlyPlaying ?: PlayerID;
     private isEndOfRound ?: boolean;
     private isCurrentRoundTheLast ?: boolean;
-    private playingQueue : Array<string>;
+    private playingQueue : Array<PlayerID>;
     private usedTiles : Map<TileType, Number>;
     private notUsedTiles : Map<TileType, Number>;
-    private players : Map<string, AzulPlayer>;
+    private players : Map<PlayerID, AzulPlayer>;
     
 
-    constructor(gameID : string, roomCode : Number) {
+    constructor(gameID : string, roomID : RoomID) {
         this.gameID = gameID;
-        this.roomCode = roomCode;
+        this.roomID = roomID;
 
-        this.playingQueue = new Array<string>();
+        this.playingQueue = new Array<PlayerID>();
         this.usedTiles = new Map<TileType, Number>();
         this.notUsedTiles = new Map<TileType, Number>();
-        this.players = new Map<string, AzulPlayer>();
+        this.players = new Map<PlayerID, AzulPlayer>();
 
         this.fillNotUsedTiles();
     }
 
+    public addPlayer(player : AzulPlayer) {
+        this.players.set(player.getPlayerID(), player); 
+    }
+
+    public start() {
+
+    }
+
+    public applyMove(playerID : PlayerID, move : Move) {
+
+    }
+
+    public getGameState() : GameState {
+        return new GameState("", "", false);
+    }
+
+    public getGameID() : GameID {
+        return this.gameID;
+    }
+
+    public getRoomID() : RoomID {
+        return this.roomID;
+    }
+    
     private fillNotUsedTiles() {
-        this.notUsedTiles.set(TileType.patternedBlack, 20);
-        this.notUsedTiles.set(TileType.patternedBlue, 20);
-        this.notUsedTiles.set(TileType.patternedYellow, 20);
-        this.notUsedTiles.set(TileType.plainBlue, 20);
-        this.notUsedTiles.set(TileType.plainRed, 20);
-    }       
+        const initialTilesCount = 20;
+
+        this.notUsedTiles.set(TileType.patternedBlack, initialTilesCount);
+        this.notUsedTiles.set(TileType.patternedBlue, initialTilesCount);
+        this.notUsedTiles.set(TileType.patternedYellow, initialTilesCount);
+        this.notUsedTiles.set(TileType.plainBlue, initialTilesCount);
+        this.notUsedTiles.set(TileType.plainRed, initialTilesCount);
+    }
+    
+    private fillTileContainers() {
+
+    }
+
+    private countPoints() {
+
+    }
+
+    private adjustTileContainersCount() {
+
+    }
+
+    private areContainersEmpty() : boolean {
+        return false;
+    }
 } 
